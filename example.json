@@ -1,0 +1,43 @@
+{
+  "data": {
+    "partitioning": {
+      "base_folder": "/dbfs/mnt/group03/training_test/models/base_M",
+      "filenames": [
+        "cells_50_1000_images_1541251.csv",
+        "cells_50_2000_images_1541251.csv",
+        "cells_50_5000_images_1541251.csv"
+      ],
+      "shortnames": ["coarse", "middle", "fine"],
+      "skiprows": 0
+    },
+    "train": {
+      "image_base_dir": "/dbfs/mnt/multimedia-commons/data/images/",
+      "dataset_path": "/dbfs/mnt/group03/training_test/test_assign_0.csv",
+      "nrows": null,
+      "batch_size": 64,
+      "shuffle": false
+    },
+    "valid": {
+      "image_base_dir": "/dbfs/mnt/multimedia-commons/data/images/",
+      "dataset_path": "/dbfs/mnt/group03/training_test/test_assign_0.csv",
+      "nrows": null,
+      "batch_size": 64
+    }
+  },
+  "training": {
+    "continue_from_checkpoint": "",
+    "save_checkpoints": true,
+    "lr": 1e-2,
+    "lr_scheduler_activate": true,
+    "lr_scheduler": {
+      "step_size": 5,
+      "gamma": 0.5
+    },
+
+    "fit_params": {
+      "epochs": 15,
+      "validation_steps": 100
+    }
+  },
+  "base_result_dir": "/dbfs/mnt/group03/training_test/models"
+}

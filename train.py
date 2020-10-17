@@ -58,7 +58,7 @@ def step_lr(epoch, base_lr, step_size, gamma=0.5):
 def main(cfg):
     timestamp = datetime.now().strftime('%Y-%m-%d:%H-%M')
     result_dir = Path(cfg['base_result_dir'], timestamp)
-    result_dir.mkdir()
+    result_dir.mkdir(parents=True)
 
     # save partitionings to result folder
     for p_file in cfg['data']['partitioning']['filenames']:

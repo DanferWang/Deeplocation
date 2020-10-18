@@ -72,6 +72,7 @@ def main(cfg):
     logging.info(partitionings)
 
     logging.info('Build the model...')
+    tf.device('/gpu:0')
     # build model with n classifiers on top
     # the total loss that will be minimized by the model will be the sum of all individual losses
     model = build_multi_partitioning_model(

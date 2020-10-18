@@ -1,5 +1,4 @@
 import logging
-from argparse import ArgumentParser
 from pathlib import Path
 from typing import List, Tuple
 
@@ -75,7 +74,8 @@ class ImageDataset:
                  image_base_dir: str,
                  partitionings: List[Partitioning],
                  nrows=None,
-                 batch_size=32,
+                 # edit
+                 batch_size=64,
                  target_image_size=224,
                  shuffle=False,
                  validation=False,
@@ -120,6 +120,7 @@ class ImageDataset:
     def __len__(self):
         return len(self.df.index)
 
+    @tf.function
     def _image_preprocessing(self, img_path):
         """Load an JPEG image from file and process it
 
@@ -180,6 +181,7 @@ class ImageDataset:
 
         return img
 
+    @tf.function
     def _process_item(self, img_path, *class_indexes):
         """Wrapper function that delivers a preprocessed image and target values
 

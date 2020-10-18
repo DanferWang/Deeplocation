@@ -11,7 +11,7 @@ from tensorflow.keras.applications.resnet_v2 import ResNet101V2
 
 from dataloader import ImageDataset, Partitioning, get_partitionings
 
-
+@tf.function
 def build_multi_partitioning_model(partitionings: List[Partitioning], checkpoint: None) -> tf.keras.models.Model:
     """Build ResNet model with multiple classifier on top - one for each partitioning
 
@@ -41,7 +41,7 @@ def build_multi_partitioning_model(partitionings: List[Partitioning], checkpoint
         else:
             raise ValueError('Shape mismatch for given classification layers and size of partitioning')
 
-
+@tf.function
 def step_lr(epoch, base_lr, step_size, gamma=0.5):
     """Decay the learning rate every step_size epochs
 

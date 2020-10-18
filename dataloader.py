@@ -8,6 +8,7 @@ import tensorflow as tf
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
+tf.device('/gpu:0')
 
 class Partitioning:
     """ Partitioning class to map class labels (i.e. s2 cells) to class indexes.
@@ -120,7 +121,6 @@ class ImageDataset:
     def __len__(self):
         return len(self.df.index)
 
-    @tf.function
     def _image_preprocessing(self, img_path):
         """Load an JPEG image from file and process it
 
@@ -181,7 +181,6 @@ class ImageDataset:
 
         return img
 
-    @tf.function
     def _process_item(self, img_path, *class_indexes):
         """Wrapper function that delivers a preprocessed image and target values
 

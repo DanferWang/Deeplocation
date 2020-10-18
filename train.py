@@ -11,7 +11,6 @@ from tensorflow.keras.applications.resnet_v2 import ResNet101V2
 
 from dataloader import ImageDataset, Partitioning, get_partitionings
 
-@tf.function
 def build_multi_partitioning_model(partitionings: List[Partitioning], checkpoint: None) -> tf.keras.models.Model:
     """Build ResNet model with multiple classifier on top - one for each partitioning
 
@@ -41,7 +40,6 @@ def build_multi_partitioning_model(partitionings: List[Partitioning], checkpoint
         else:
             raise ValueError('Shape mismatch for given classification layers and size of partitioning')
 
-@tf.function
 def step_lr(epoch, base_lr, step_size, gamma=0.5):
     """Decay the learning rate every step_size epochs
 
@@ -56,6 +54,7 @@ def step_lr(epoch, base_lr, step_size, gamma=0.5):
 
 
 def main(cfg):
+    tf.device('/gpu:0')
     timestamp = datetime.now().strftime('%Y-%m-%d:%H-%M')
     result_dir = Path(cfg['base_result_dir'], timestamp)
     result_dir.mkdir(parents=True)
@@ -72,7 +71,6 @@ def main(cfg):
     logging.info(partitionings)
 
     logging.info('Build the model...')
-    tf.device('/gpu:0')
     # build model with n classifiers on top
     # the total loss that will be minimized by the model will be the sum of all individual losses
     model = build_multi_partitioning_model(

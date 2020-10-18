@@ -74,7 +74,7 @@ class ImageDataset:
                  image_base_dir: str,
                  partitionings: List[Partitioning],
                  nrows=None,
-                 batch_size=32,
+                 batch_size=16,
                  target_image_size=224,
                  shuffle=False,
                  validation=False,
@@ -130,7 +130,7 @@ class ImageDataset:
         Returns: preprocessed image as Tensor
 
         """
-
+        tf.device('/cpu:0')
         img_encoded = tf.io.read_file(img_path)
         img = tf.image.decode_jpeg(img_encoded, channels=3)  # decode_image does not return a tensor with shape
         img = tf.image.convert_image_dtype(img, tf.float32)
@@ -189,6 +189,7 @@ class ImageDataset:
         Returns: (X, y)
 
         """
+        tf.device('/cpu:0')
         img = self._image_preprocessing(img_path)
         return img, class_indexes
 

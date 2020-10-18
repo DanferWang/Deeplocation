@@ -3,9 +3,9 @@
     "partitioning": {
       "base_folder": "/dbfs/mnt/group03/training_test/models/base_M",
       "filenames": [
-        "cells_50_1000_images_1541251.csv",
-        "cells_50_2000_images_1541251.csv",
-        "cells_50_5000_images_1541251.csv"
+        "cells_50_1000_images_1540521.csv",
+        "cells_50_2000_images_1540521.csv",
+        "cells_50_5000_images_1540521.csv"
       ],
       "shortnames": ["coarse", "middle", "fine"],
       "skiprows": 0

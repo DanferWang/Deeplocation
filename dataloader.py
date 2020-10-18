@@ -113,9 +113,8 @@ class ImageDataset:
             ds_p = [tf.data.Dataset.from_tensor_slices(self.df[p.name].values) for p in partitionings]
 
             ds = tf.data.Dataset.zip((ds_images, *ds_p))
-            self.ds = ds.map(self._process_item, num_parallel_calls=AUTOTUNE).prefetch(buffer_size=AUTOTUNE)
-            # eliminate cashe for high ultilization
-            # self.ds = self._prepare_for_iterate(ds)
+            ds = ds.map(self._process_item, num_parallel_calls=AUTOTUNE)
+            self.ds = self._prepare_for_iterate(ds)
 
     def __len__(self):
         return len(self.df.index)
@@ -194,15 +193,15 @@ class ImageDataset:
         img = self._image_preprocessing(img_path)
         return img, class_indexes
 
-    def _prepare_for_iterate(self, ds, cache=True, shuffle_buffer_size=1000):
+    def _prepare_for_iterate(self, ds, cache=False, shuffle_buffer_size=1000):
         # This is a small dataset, only load it once, and keep it in memory.
         # use `.cache(filename)` to cache preprocessing work for datasets that don't
         # fit in memory.
         if cache:
             if isinstance(cache, str):
                 ds = ds.cache(cache)
-        else:
-            ds = ds.cache()
+        # else:
+        #     ds = ds.cache()
 
         ds = ds.repeat()
         if self.shuffle:

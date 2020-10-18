@@ -8,7 +8,6 @@ import tensorflow as tf
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
-tf.device('/gpu:0')
 
 class Partitioning:
     """ Partitioning class to map class labels (i.e. s2 cells) to class indexes.
@@ -75,8 +74,7 @@ class ImageDataset:
                  image_base_dir: str,
                  partitionings: List[Partitioning],
                  nrows=None,
-                 # edit
-                 batch_size=64,
+                 batch_size=32,
                  target_image_size=224,
                  shuffle=False,
                  validation=False,
@@ -109,7 +107,7 @@ class ImageDataset:
         self.nbatches = int(np.ceil(len(self) / batch_size))
 
         logging.info('Prepare dataset...')
-        with tf.device('/gpu:0'):
+        with tf.device('/cpu:0'):
             ds_images = tf.data.Dataset.from_tensor_slices(self.df['img_path'].values)
             #ds_p = [tf.data.Dataset.from_tensor_slices(self.df[p].values) for p in self.df.columns[1:].to_list()]
             ds_p = [tf.data.Dataset.from_tensor_slices(self.df[p.name].values) for p in partitionings]

@@ -14,14 +14,14 @@
       "image_base_dir": "/dbfs/mnt/multimedia-commons/data/images/",
       "dataset_path": "/dbfs/mnt/group03/training_test/test_assign_0.csv",
       "nrows": null,
-      "batch_size": 128,
+      "batch_size": 64,
       "shuffle": false
     },
     "valid": {
       "image_base_dir": "/dbfs/mnt/multimedia-commons/data/images/",
       "dataset_path": "/dbfs/mnt/group03/training_test/test_assign_0.csv",
       "nrows": null,
-      "batch_size": 128
+      "batch_size": 64
     }
   },
   "training": {

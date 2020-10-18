@@ -70,58 +70,58 @@ def main(cfg):
     logging.info(partitionings)
 
     logging.info('Build the model...')
-    tf.device('/gpu:0')
-    # build model with n classifiers on top
-    # the total loss that will be minimized by the model will be the sum of all individual losses
-    model = build_multi_partitioning_model(
-        partitionings=partitionings,
-        checkpoint=cfg['training']['continue_from_checkpoint']
-    )
-    callbacks = []
-
-    # learning rate scheduler
-    if cfg['training']['lr_scheduler_activate']:
-        schedule_func = partial(step_lr, base_lr=cfg['training']['lr'], **cfg['training']['lr_scheduler'])
-        lr_scheduler = tf.keras.callbacks.LearningRateScheduler(schedule_func)
-        callbacks.append(lr_scheduler)
-
-    # optimizer
-    optim = tf.keras.optimizers.SGD(learning_rate=cfg['training']['lr'], momentum=0.9, decay=1e-4, nesterov=True)
-    model.compile(optimizer=optim, loss=tf.keras.losses.sparse_categorical_crossentropy)
-
-    logging.info('Read the training set...')
-    dataset_train = ImageDataset(**cfg['data']['train'], partitionings=partitionings)
-    logging.info(f'Number of images for training: {len(dataset_train)}')
-    logging.info(f'Number of batches for training: {dataset_train.nbatches}')
-
-    logging.info('Read the validation set...')
-    dataset_valid = ImageDataset(**cfg['data']['valid'], validation=True, partitionings=partitionings)
-
-    # tensorboard logging
-    log_dir = result_dir / 'logs'
-    log_dir.mkdir(parents=True, exist_ok=True)
-    tbc = tf.keras.callbacks.TensorBoard(log_dir=str(log_dir), update_freq=100, write_graph=False, profile_batch=0)
-    callbacks.append(tbc)
-
-    # save best model callback
-    if cfg['training']['save_checkpoints']:
-        cc = tf.keras.callbacks.ModelCheckpoint(
-            str(result_dir / 'model-{epoch:02d}-{val_loss:.2f}.h5'),
-            monitor='val_loss',
-            save_best_only=False,
-            save_weights_only=False,
-            save_freq='epoch'
+    with tf.device('/gpu:0'):
+        # build model with n classifiers on top
+        # the total loss that will be minimized by the model will be the sum of all individual losses
+        model = build_multi_partitioning_model(
+            partitionings=partitionings,
+            checkpoint=cfg['training']['continue_from_checkpoint']
         )
-        callbacks.append(cc)
-
-    # train the model
-    model.fit(
-        dataset_train.ds,
-        callbacks=callbacks,
-        steps_per_epoch=dataset_train.nbatches,
-        validation_data=dataset_valid.ds,
-        **cfg['training']['fit_params']
-    )
+        callbacks = []
+    
+        # learning rate scheduler
+        if cfg['training']['lr_scheduler_activate']:
+            schedule_func = partial(step_lr, base_lr=cfg['training']['lr'], **cfg['training']['lr_scheduler'])
+            lr_scheduler = tf.keras.callbacks.LearningRateScheduler(schedule_func)
+            callbacks.append(lr_scheduler)
+    
+        # optimizer
+        optim = tf.keras.optimizers.SGD(learning_rate=cfg['training']['lr'], momentum=0.9, decay=1e-4, nesterov=True)
+        model.compile(optimizer=optim, loss=tf.keras.losses.sparse_categorical_crossentropy, metric='accuracy')
+    
+        logging.info('Read the training set...')
+        dataset_train = ImageDataset(**cfg['data']['train'], partitionings=partitionings)
+        logging.info(f'Number of images for training: {len(dataset_train)}')
+        logging.info(f'Number of batches for training: {dataset_train.nbatches}')
+    
+        logging.info('Read the validation set...')
+        dataset_valid = ImageDataset(**cfg['data']['valid'], validation=True, partitionings=partitionings)
+    
+        # tensorboard logging
+        log_dir = result_dir / 'logs'
+        log_dir.mkdir(parents=True, exist_ok=True)
+        tbc = tf.keras.callbacks.TensorBoard(log_dir=str(log_dir), update_freq=100, write_graph=False, profile_batch=0)
+        callbacks.append(tbc)
+    
+        # save best model callback
+        if cfg['training']['save_checkpoints']:
+            cc = tf.keras.callbacks.ModelCheckpoint(
+                str(result_dir / 'model-{epoch:02d}-{val_loss:.2f}.h5'),
+                monitor='val_loss',
+                save_best_only=False,
+                save_weights_only=False,
+                save_freq='epoch'
+            )
+            callbacks.append(cc)
+    
+        # train the model
+        model.fit(
+            dataset_train.ds,
+            callbacks=callbacks,
+            steps_per_epoch=dataset_train.nbatches,
+            validation_data=dataset_valid.ds,
+            **cfg['training']['fit_params']
+        )
 
     return
 

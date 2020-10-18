@@ -74,7 +74,7 @@ class ImageDataset:
                  image_base_dir: str,
                  partitionings: List[Partitioning],
                  nrows=None,
-                 batch_size=16,
+                 batch_size=32,
                  target_image_size=224,
                  shuffle=False,
                  validation=False,

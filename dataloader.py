@@ -113,8 +113,9 @@ class ImageDataset:
             ds_p = [tf.data.Dataset.from_tensor_slices(self.df[p.name].values) for p in partitionings]
 
             ds = tf.data.Dataset.zip((ds_images, *ds_p))
-            ds = ds.map(self._process_item, num_parallel_calls=AUTOTUNE)
-            self.ds = self._prepare_for_iterate(ds)
+            self.ds = ds.map(self._process_item, num_parallel_calls=AUTOTUNE).prefetch(buffer_size=AUTOTUNE)
+            # eliminate cashe for high ultilization
+            # self.ds = self._prepare_for_iterate(ds)
 
     def __len__(self):
         return len(self.df.index)

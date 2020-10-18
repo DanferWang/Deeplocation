@@ -108,7 +108,7 @@ class ImageDataset:
         self.nbatches = int(np.ceil(len(self) / batch_size))
 
         logging.info('Prepare dataset...')
-        with tf.device('/cpu:0'):
+        with tf.device('/gpu:0'):
             ds_images = tf.data.Dataset.from_tensor_slices(self.df['img_path'].values)
             #ds_p = [tf.data.Dataset.from_tensor_slices(self.df[p].values) for p in self.df.columns[1:].to_list()]
             ds_p = [tf.data.Dataset.from_tensor_slices(self.df[p.name].values) for p in partitionings]

@@ -87,7 +87,7 @@ def main(cfg):
     
         # optimizer
         optim = tf.keras.optimizers.SGD(learning_rate=cfg['training']['lr'], momentum=0.9, decay=1e-4, nesterov=True)
-        model.compile(optimizer=optim, loss=tf.keras.losses.sparse_categorical_crossentropy)
+        model.compile(optimizer=optim, loss=tf.keras.losses.sparse_categorical_crossentropy, metric='accuracy')
     
         logging.info('Read the training set...')
         dataset_train = ImageDataset(**cfg['data']['train'], partitionings=partitionings)

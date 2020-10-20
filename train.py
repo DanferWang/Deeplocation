@@ -11,6 +11,7 @@ from tensorflow.keras.applications.resnet_v2 import ResNet101V2
 
 from dataloader import ImageDataset, Partitioning, get_partitionings
 
+
 def build_multi_partitioning_model(partitionings: List[Partitioning], checkpoint: None) -> tf.keras.models.Model:
     """Build ResNet model with multiple classifier on top - one for each partitioning
 
@@ -39,6 +40,7 @@ def build_multi_partitioning_model(partitionings: List[Partitioning], checkpoint
             return base_model
         else:
             raise ValueError('Shape mismatch for given classification layers and size of partitioning')
+
 
 def step_lr(epoch, base_lr, step_size, gamma=0.5):
     """Decay the learning rate every step_size epochs
@@ -70,68 +72,80 @@ def main(cfg):
     logging.info(partitionings)
 
     logging.info('Build the model...')
-    with tf.device('/gpu:0'):
-        # build model with n classifiers on top
-        # the total loss that will be minimized by the model will be the sum of all individual losses
-        model = build_multi_partitioning_model(
-            partitionings=partitionings,
-            checkpoint=cfg['training']['continue_from_checkpoint']
+    tf.device('/gpu:0')
+    # build model with n classifiers on top
+    # the total loss that will be minimized by the model will be the sum of all individual losses
+    model = build_multi_partitioning_model(
+        partitionings=partitionings,
+        checkpoint=cfg['training']['continue_from_checkpoint']
+    )
+    callbacks = []
+
+    # learning rate scheduler
+    if cfg['training']['lr_scheduler_activate']:
+        schedule_func = partial(step_lr, base_lr=cfg['training']['lr'], **cfg['training']['lr_scheduler'])
+        lr_scheduler = tf.keras.callbacks.LearningRateScheduler(schedule_func)
+        callbacks.append(lr_scheduler)
+
+    # optimizer
+    optim = tf.keras.optimizers.SGD(learning_rate=cfg['training']['lr'], momentum=0.9, decay=1e-4, nesterov=True)
+    model.compile(optimizer=optim, loss=tf.keras.losses.sparse_categorical_crossentropy)
+
+    logging.info('Read the training set...')
+    dataset_train = ImageDataset(**cfg['data']['train'], partitionings=partitionings)
+    logging.info(f'Number of images for training: {len(dataset_train)}')
+    logging.info(f'Number of batches for training: {dataset_train.nbatches}')
+
+    logging.info('Read the validation set...')
+    dataset_valid = ImageDataset(**cfg['data']['valid'], validation=True, partitionings=partitionings)
+
+    # tensorboard logging
+    log_dir = result_dir / 'logs'
+    log_dir.mkdir(parents=True, exist_ok=True)
+    tbc = tf.keras.callbacks.TensorBoard(log_dir=str(log_dir), update_freq=100, write_graph=False, profile_batch=0)
+    callbacks.append(tbc)
+
+    # save best model callback
+    if cfg['training']['save_checkpoints']:
+        cc = tf.keras.callbacks.ModelCheckpoint(
+            str(result_dir / 'model-{epoch:02d}-{val_loss:.2f}.h5'),
+            monitor='val_loss',
+            save_best_only=False,
+            save_weights_only=False,
+            save_freq='epoch'
         )
-        callbacks = []
-    
-        # learning rate scheduler
-        if cfg['training']['lr_scheduler_activate']:
-            schedule_func = partial(step_lr, base_lr=cfg['training']['lr'], **cfg['training']['lr_scheduler'])
-            lr_scheduler = tf.keras.callbacks.LearningRateScheduler(schedule_func)
-            callbacks.append(lr_scheduler)
-    
-        # optimizer
-        optim = tf.keras.optimizers.SGD(learning_rate=cfg['training']['lr'], momentum=0.9, decay=1e-4, nesterov=True)
-        model.compile(optimizer=optim, loss=tf.keras.losses.sparse_categorical_crossentropy)
-    
-        logging.info('Read the training set...')
-        dataset_train = ImageDataset(**cfg['data']['train'], partitionings=partitionings)
-        logging.info(f'Number of images for training: {len(dataset_train)}')
-        logging.info(f'Number of batches for training: {dataset_train.nbatches}')
-    
-        logging.info('Read the validation set...')
-        dataset_valid = ImageDataset(**cfg['data']['valid'], validation=True, partitionings=partitionings)
-    
-        # tensorboard logging
-        log_dir = result_dir / 'logs'
-        log_dir.mkdir(parents=True, exist_ok=True)
-        tbc = tf.keras.callbacks.TensorBoard(log_dir=str(log_dir), update_freq=100, write_graph=False, profile_batch=0)
-        callbacks.append(tbc)
-    
-        # save best model callback
-        if cfg['training']['save_checkpoints']:
-            cc = tf.keras.callbacks.ModelCheckpoint(
-                str(result_dir / 'model-{epoch:02d}-{val_loss:.2f}.h5'),
-                monitor='val_loss',
-                save_best_only=False,
-                save_weights_only=False,
-                save_freq='epoch'
-            )
-            callbacks.append(cc)
-    
-        # train the model
-        model.fit(
-            dataset_train.ds,
-            callbacks=callbacks,
-            steps_per_epoch=dataset_train.nbatches,
-            validation_data=dataset_valid.ds,
-            **cfg['training']['fit_params']
-        )
+        callbacks.append(cc)
+
+    # train the model
+    model.fit(
+        dataset_train.ds,
+        callbacks=callbacks,
+        steps_per_epoch=dataset_train.nbatches,
+        validation_data=dataset_valid.ds,
+        **cfg['training']['fit_params']
+    )
 
     return
 
-
 if __name__ == '__main__':
+    # restrict GPU Mem
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        # Restrict TensorFlow to only allocate 9GB of memory on the first GPU
+        try:
+            tf.config.experimental.set_virtual_device_configuration(
+                gpus[0],
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=9216)])
+        except RuntimeError as e:
+            # Virtual devices must be set before GPUs have been initialized
+            print(e)
+
     # user define
     root_path = "./Deeplocation/"
 
     config_file = root_path + "example.json"
-    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d-%m-%Y %H:%M:%S',
+                        level=logging.INFO)
 
     cfg = json.load(open(config_file, 'r'))
 

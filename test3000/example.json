@@ -39,5 +39,5 @@
       "validation_steps": 100
     }
   },
-  "base_result_dir": "/dbfs/mnt/group03/test3000"
+  "base_result_dir": "./Deeplocation"
 }

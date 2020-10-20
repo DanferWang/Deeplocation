@@ -131,7 +131,7 @@ def main(cfg):
 
 if __name__ == '__main__':
     # user define
-    root_path = "./Deeplocation/"
+    root_path = "./Deeplocation/test3000/"
 
     config_file = root_path + "example.json"
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', datefmt='%d-%m-%Y %H:%M:%S',

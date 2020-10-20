@@ -72,6 +72,7 @@ def main(cfg):
     logging.info(partitionings)
 
     logging.info('Build the model...')
+
     tf.device('/gpu:0')
     # build model with n classifiers on top
     # the total loss that will be minimized by the model will be the sum of all individual losses
@@ -107,7 +108,6 @@ def main(cfg):
 
     # save best model callback
     if cfg['training']['save_checkpoints']:
-        tf.device('/cpu:0')
         cc = tf.keras.callbacks.ModelCheckpoint(
             str(result_dir / 'model-{epoch:02d}-{val_loss:.2f}.h5'),
             monitor='val_loss',
@@ -130,6 +130,18 @@ def main(cfg):
     return
 
 if __name__ == '__main__':
+    # restrict GPU Mem
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        # Restrict TensorFlow to only allocate 9GB of memory on the first GPU
+        try:
+            tf.config.experimental.set_virtual_device_configuration(
+                gpus[0],
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=9216)])
+        except RuntimeError as e:
+            # Virtual devices must be set before GPUs have been initialized
+            print(e)
+
     # user define
     root_path = "./Deeplocation/test3000/"
 

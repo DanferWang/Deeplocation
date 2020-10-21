@@ -37,12 +37,12 @@ def assign_class_index(cell: s2.Cell, mapping: dict) -> Union[int, None]:
 
 if __name__ == '__main__':
     # user define
-    cell_path = "dbfs/mnt/group03/face_less0_ten_create_cell"
+    cell_path = "dbfs/mnt/group03/face_less0_ten_create_cell/"
     input_dataset = "/dbfs/mnt/group03/face_less0_ten.csv"
     output_path = "dbfs/mnt/group03/face_less0_ten_assign_classes.csv"
-    partionings_file_list = [path_root + cell_path + "cells_5_100_images_148001.csv",
-                             path_root + cell_path + "cells_5_200_images_148001.csv",
-                             path_root + cell_path + "cells_5_500_images_148001.csv"]
+    partionings_file_list = [cell_path + "cells_5_100_images_148001.csv",
+                             cell_path + "cells_5_200_images_148001.csv",
+                             cell_path + "cells_5_500_images_148001.csv"]
 
     logging.basicConfig(
         format='%(asctime)s %(levelname)s: %(message)s',

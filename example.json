@@ -1,25 +1,25 @@
 {
   "data": {
     "partitioning": {
-      "base_folder": "/dbfs/mnt/group03/training_test/models/base_M",
+      "base_folder": "/dbfs/mnt/group03/face_less0_ten_create_cell",
       "filenames": [
-        "cells_5_500_images_154052.csv",
-        "cells_5_200_images_154052.csv",
-        "cells_5_100_images_154052.csv"
+        "cells_5_500_images_148001.csv",
+        "cells_5_200_images_148001.csv",
+        "cells_5_100_images_148001.csv"
       ],
       "shortnames": ["coarse", "middle", "fine"],
       "skiprows": 0
     },
     "train": {
       "image_base_dir": "/dbfs/mnt/multimedia-commons/data/images/",
-      "dataset_path": "/dbfs/mnt/group03/training_test/test_assign_0_ten_train.csv",
+      "dataset_path": "/dbfs/mnt/group03/face_less0_ten_train.csv",
       "nrows": null,
       "batch_size": 32,
       "shuffle": false
     },
     "valid": {
       "image_base_dir": "/dbfs/mnt/multimedia-commons/data/images/",
-      "dataset_path": "/dbfs/mnt/group03/training_test/test_assign_0_ten_valid.csv",
+      "dataset_path": "/dbfs/mnt/group03/face_less0_ten_valid.csv",
       "nrows": null,
       "batch_size": 32
     }

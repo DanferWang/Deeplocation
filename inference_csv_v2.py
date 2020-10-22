@@ -16,7 +16,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-c', '--cpu', action='store_true', help='use cpu')
     # dataset
-    parser.add_argument('-l', '--labels', type=str, default='/dbfs/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv', help='path to ground truth labels')
+    parser.add_argument('-l', '--labels', type=str, default='dbfs:/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv', help='path to ground truth labels')
     #parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
     # model
     parser.add_argument('-m', '--model', type=Path, default='/dbfs/mnt/group03/inference_dataset0/model_ten-03-20.87.h5', help='path to a model checkpoint (.h5)')
@@ -84,7 +84,7 @@ def main():
         # img_dir
         img_path = "/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0]
         fname = os.path.basename("/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0])
-        img_meta = meta_info.loc[meta_info['IMG_ID'] == fname]
+        img_meta = meta_info.loc[meta_info['IMG_ID'] == predict_image.iloc[j].values[0]]
         if len(img_meta) > 0:
             img_meta = img_meta.iloc[0]
         else:

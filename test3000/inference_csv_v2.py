@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument('-l', '--labels', type=str, default='/dbfs/mnt/group03/test3000/test_dataset_3000.csv', help='path to ground truth labels')
     #parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
     # model
-    parser.add_argument('-m', '--model', type=Path, default='/dbfs/mnt/group03/model_ten_face-04-21.03.h5', help='path to a model checkpoint (.h5)')
+    parser.add_argument('-m', '--model', type=Path, default='/dbfs/mnt/group03/2020-10-21:20-45/model-03-20.85.h5', help='path to a model checkpoint (.h5)')
     # output_dir
     parser.add_argument('-o', '--output', type=str, default= "/dbfs/mnt/group03", help="path to output directory")
     args = parser.parse_args()

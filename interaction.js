@@ -2,7 +2,8 @@ $(document).ready(function () {
 
 
     var IMG_PATH = ""; // when using local stored images
-    var CSV_PATH = "demo/data/scene_M_p_im2gps.csv";
+    //var CSV_PATH = "demo/data/scene_M_p_im2gps.csv";
+    var CSV_PATH = "demo/data/smalltest154.csv"
 
     var selectedKey = -1; // current selected key
     var dataOpen = new Map();
@@ -133,14 +134,14 @@ $(document).ready(function () {
                 console.debug("number or rows read from csv: " + list.length);
 
                 // 'All Rights Reserved', 'No known copyright restrictions', 'United States Government Work', 'Public Domain Mark'
-                allowed_licenses = ['CC-BY-NC-SA 2.0', 'CC-BY-NC 2.0', 'CC-BY-NC-ND 2.0', 'CC-BY 2.0', 'CC-BY-SA 2.0', 'CC-BY-ND 2.0', 'CC0']
+                //allowed_licenses = ['CC-BY-NC-SA 2.0', 'CC-BY-NC 2.0', 'CC-BY-NC-ND 2.0', 'CC-BY 2.0', 'CC-BY-SA 2.0', 'CC-BY-ND 2.0', 'CC0']
 
                 for (var i = 0; i < list.length; i++) {
-                    if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
-                    {
+                    //if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
+                    //{
                         dataOpen.set(i, list[i]); // fill map
                         addImageToList(IMG_PATH + list[i].url, i); // fill list of images
-                    }
+                    //}
                 }
 
                 // inital choose a random image
@@ -188,7 +189,7 @@ $(document).ready(function () {
         $(".preview").attr("src", IMG_PATH + item.url);
 
         // photo licence
-        $(".license_text").text("©" + item.author + ' ' + item.license_name);
+        //$(".license_text").text("©" + item.author + ' ' + item.license_name);
 
         // map preferences
         markerReal.setLatLng(new L.LatLng(item.gt_lat, item.gt_long));
@@ -290,7 +291,7 @@ $(document).ready(function () {
             var item = dataClosed.get(selectedKey);
             $(".image_full_closed").attr("src", IMG_PATH + item.url);
             $(".preview_closed").attr("src", IMG_PATH + item.url);
-            $(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
+            //$(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
 
             //map.setView([15.0, 0.0], zoom=2);
 
@@ -388,7 +389,7 @@ $(document).ready(function () {
         // set preview closed image
         if (dataClosed.size == 1) {
             $(".image_full_closed").attr("src", IMG_PATH + item.url);
-            $(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
+            //$(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
 
         }
 

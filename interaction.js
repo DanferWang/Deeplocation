@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     var IMG_PATH = ""; // when using local stored images
     //var CSV_PATH = "demo/data/scene_M_p_im2gps.csv";
-    var CSV_PATH = "demo/data/smalltest154.csv"
+    var CSV_PATH = "demo/data/face_less0_ten_result_3000.csv"
 
     var selectedKey = -1; // current selected key
     var dataOpen = new Map();
@@ -137,8 +137,8 @@ $(document).ready(function () {
                 //allowed_licenses = ['CC-BY-NC-SA 2.0', 'CC-BY-NC 2.0', 'CC-BY-NC-ND 2.0', 'CC-BY 2.0', 'CC-BY-SA 2.0', 'CC-BY-ND 2.0', 'CC0']
 
                 var arr = [];
-                while(arr.length < 50){
-                    var r = Math.floor(Math.random() * 150);
+                while(arr.length < 100){
+                    var r = Math.floor(Math.random() * 2999);
                     if(arr.indexOf(r) === -1) arr.push(r);
                 }
 

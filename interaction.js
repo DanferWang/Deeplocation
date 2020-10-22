@@ -177,11 +177,11 @@ $(document).ready(function () {
     /**
      * Randomly selects a key from current dataOpen
      */
-    // function getRandomKey() {
-    //     keyList = Array.from(dataOpen.keys());
-    //     var random = Math.floor(Math.random() * keyList.length);
-    //     return keyList[random];
-    // }
+     function getRandomKey() {
+         keyList = Array.from(dataOpen.keys());
+         var random = Math.floor(Math.random() * keyList.length);
+         return keyList[random];
+     }
 
     function init(item) {
 

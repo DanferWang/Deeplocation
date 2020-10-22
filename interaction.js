@@ -136,11 +136,18 @@ $(document).ready(function () {
                 // 'All Rights Reserved', 'No known copyright restrictions', 'United States Government Work', 'Public Domain Mark'
                 //allowed_licenses = ['CC-BY-NC-SA 2.0', 'CC-BY-NC 2.0', 'CC-BY-NC-ND 2.0', 'CC-BY 2.0', 'CC-BY-SA 2.0', 'CC-BY-ND 2.0', 'CC0']
 
-                for (var i = 0; i < list.length; i++) {
+                var arr = [];
+                while(arr.length < 50){
+                    var r = Math.floor(Math.random() * 150);
+                    if(arr.indexOf(r) === -1) arr.push(r);
+                }
+
+                for (var i = 0; i < arr.length; i++) {
                     //if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
                     //{
-                        dataOpen.set(i, list[i]); // fill map
-                        addImageToList(IMG_PATH + list[i].url, i); // fill list of images
+                        var w = arr[i]
+                        dataOpen.set(w, list[w]); // fill map
+                        addImageToList(IMG_PATH + list[w].url, i); // fill list of images
                     //}
                 }
 

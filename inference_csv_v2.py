@@ -78,7 +78,7 @@ def main():
     i = 0
     for j in range(len(predict_images)):
         i += 1
-        # print('{} / {} Processing: {}'.format(i, len(predict_images), predict_images.iloc[j].values[0]))
+        print('{} / {} Processing: {}'.format(i, len(predict_images), predict_images.iloc[j].values[0]))
 
         # get meta information if available
         # img_dir

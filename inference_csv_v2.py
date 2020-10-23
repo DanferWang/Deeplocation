@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import sys
 import csv
-#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppresses unnecessarily excessive console output
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppresses unnecessarily excessive console output
 import tensorflow as tf
 
 # own imports
@@ -16,14 +16,19 @@ def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-c', '--cpu', action='store_true', help='use cpu')
     # dataset
-    parser.add_argument('-l', '--labels', type=str, default='/dbfs/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv', help='path to ground truth labels')
-    #parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
+    parser.add_argument('-l', '--labels', type=str,
+                        default='/dbfs/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv',
+                        help='path to ground truth labels')
+    # parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
     # model
-    parser.add_argument('-m', '--model', type=Path, default='/dbfs/mnt/group03/inference_dataset0/model_ten-03-20.87.h5', help='path to a model checkpoint (.h5)')
+    parser.add_argument('-m', '--model', type=Path,
+                        default='/dbfs/mnt/group03/inference_dataset0/model_ten-03-20.87.h5',
+                        help='path to a model checkpoint (.h5)')
     # output_dir
-    parser.add_argument('-o', '--output', type=str, default= "/dbfs/mnt/group03", help="path to output directory")
+    parser.add_argument('-o', '--output', type=str, default="/dbfs/mnt/group03", help="path to output directory")
     args = parser.parse_args()
     return args
+
 
 def writeoutput(args, num_predict, res_list, out_p):
     if not os.path.exists(out_p):
@@ -33,7 +38,8 @@ def writeoutput(args, num_predict, res_list, out_p):
 
     with open(os.path.join(out_p, fname), 'w') as f:
         res_writer = csv.writer(f, delimiter=',')
-        res_writer.writerow(['img_id', 'gt_lat', 'predicted_lat', 'gt_long', 'predicted_long','great_circle_distance','url'])
+        res_writer.writerow(
+            ['img_id', 'gt_lat', 'predicted_lat', 'gt_long', 'predicted_long', 'great_circle_distance', 'url'])
 
         for row in res_list:
             res_writer.writerow(row)
@@ -69,12 +75,13 @@ def main():
 
     predict_images = pd.read_csv(args.labels, usecols=["IMG_ID"])
     image_url = pd.read_csv(args.labels, usecols=["s3_http"])
-    #predict_images = predict_images.iloc[0:]
+    # predict_images = predict_images.iloc[0:]
     # print(predict_images.iloc[0].values[0])
     # get predictions
 
     gc_dists = {}
-    resultlist =[]
+    resultlist = []
+    empty_list = []
     i = 0
     for j in range(len(predict_images)):
         i += 1
@@ -83,37 +90,43 @@ def main():
         # get meta information if available
         # img_dir
         img_path = "/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0]
-        fname = os.path.basename("/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0])
-        img_meta = meta_info.loc[meta_info['IMG_ID'] == predict_images.iloc[j].values[0]]
-        if len(img_meta) > 0:
-            img_meta = img_meta.iloc[0]
+        if os.path.getsize(img_path) > 1000:
+            fname = os.path.basename("/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0])
+            img_meta = meta_info.loc[meta_info['IMG_ID'] == predict_images.iloc[j].values[0]]
+            if len(img_meta) > 0:
+                img_meta = img_meta.iloc[0]
+            else:
+                img_meta = {}
+
+            ge = ge_base
+
+            # print('\t--> Using {} network for geolocation'.format(ge.network_dict['scope']))
+            ge.calc_output_dict(img_path)
+
+            # print('\t### GEOESTIMATION RESULTS ###')
+            # ======== modify here 10/15 ========
+            # ===== len -1 =====
+            for p in range(len(ge.network_dict['partitionings'])):
+                p_name = ge.network_dict['partitionings'][p]
+                pred_loc = ge.output_dict['predicted_GPS_coords'][p]
+
+                # only calculate result if ground truth location is specified in args.labels
+                dist_str = ''
+                if 'LAT' in img_meta and 'LON' in img_meta:
+                    if p_name not in gc_dists:
+                        gc_dists[p_name] = {}
+                    gc_dists[p_name][fname] = utils.gc_distance(pred_loc, [img_meta['LAT'], img_meta['LON']])
+                    dist_str = f' --> GCD to true location: {gc_dists[p_name][fname]:.2f} km'
+
+                # print(f"\tPredicted GPS coordinate (lat, lng) for <{p_name}>: ({pred_loc[0]:.2f}, {pred_loc[1]:.2f})" +
+                #       dist_str)
+                if p == 3:
+                    resultlist.append(
+                        [predict_images.iloc[j].values[0], format(img_meta['LAT'], '.2f'), format(pred_loc[0], '.2f'),
+                         format(img_meta['LON'], '.2f'), format(pred_loc[1], '.2f'),
+                         format(gc_dists[p_name][fname], '.2f'), image_url.iloc[j].values[0]])
         else:
-            img_meta = {}
-
-        ge = ge_base
-
-        # print('\t--> Using {} network for geolocation'.format(ge.network_dict['scope']))
-        ge.calc_output_dict(img_path)
-
-        # print('\t### GEOESTIMATION RESULTS ###')
-        # ======== modify here 10/15 ========
-        # ===== len -1 =====
-        for p in range(len(ge.network_dict['partitionings'])):
-            p_name = ge.network_dict['partitionings'][p]
-            pred_loc = ge.output_dict['predicted_GPS_coords'][p]
-
-            # only calculate result if ground truth location is specified in args.labels
-            dist_str = ''
-            if 'LAT' in img_meta and 'LON' in img_meta:
-                if p_name not in gc_dists:
-                    gc_dists[p_name] = {}
-                gc_dists[p_name][fname] = utils.gc_distance(pred_loc, [img_meta['LAT'], img_meta['LON']])
-                dist_str = f' --> GCD to true location: {gc_dists[p_name][fname]:.2f} km'
-
-            # print(f"\tPredicted GPS coordinate (lat, lng) for <{p_name}>: ({pred_loc[0]:.2f}, {pred_loc[1]:.2f})" +
-            #       dist_str)
-            if p == 3:
-                resultlist.append([predict_images.iloc[j].values[0], format(img_meta['LAT'], '.2f') , format(pred_loc[0],'.2f'), format(img_meta['LON'],'.2f'), format(pred_loc[1],'.2f'), format(gc_dists[p_name][fname],'.2f'), image_url.iloc[j].values[0]])
+            empty_list.append(img_path)
 
     # print results for all files with specified gt location
     if args.labels:
@@ -121,6 +134,10 @@ def main():
         utils.print_results(gc_dists)
 
     writeoutput(args, len(predict_images), resultlist, args.output)
+
+    emptyname = f"dataset0_inference_empty.csv"
+    empty_df = pd.DataFrame(data={"empty_IMG_ID": empty_list})
+    empty_df.to_csv(emptyname, index=False)
 
 
 if __name__ == '__main__':

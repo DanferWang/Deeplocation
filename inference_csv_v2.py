@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('-c', '--cpu', action='store_true', help='use cpu')
     # dataset
     parser.add_argument('-l', '--labels', type=str,
-                        default='/dbfs/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv',
+                        default='/dbfs/mnt/group03/dataset_0_ten.csv',
                         help='path to ground truth labels')
     # parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
     # model
@@ -34,7 +34,7 @@ def writeoutput(args, num_predict, res_list, out_p):
     if not os.path.exists(out_p):
         os.makedirs(out_p)
     # output csv file name
-    fname = f"dataset0_inference_result.csv"
+    fname = f"dataset0_03_inference_result.csv"
 
     with open(os.path.join(out_p, fname), 'w') as f:
         res_writer = csv.writer(f, delimiter=',')
@@ -135,7 +135,7 @@ def main():
 
     writeoutput(args, len(predict_images), resultlist, args.output)
 
-    emptyname = f"dataset0_inference_empty.csv"
+    emptyname = f"dataset0_03_inference_empty.csv"
     empty_df = pd.DataFrame(data={"empty_IMG_ID": empty_list})
     empty_df.to_csv(emptyname, index=False)
 

@@ -55,7 +55,7 @@ def main():
         try:
             tf.config.experimental.set_virtual_device_configuration(
                 gpus[0],
-                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=10240)])
         except RuntimeError as e:
             # Virtual devices must be set before GPUs have been initialized
             print(e)

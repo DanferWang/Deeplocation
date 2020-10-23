@@ -34,7 +34,7 @@ def writeoutput(args, num_predict, res_list, out_p):
     if not os.path.exists(out_p):
         os.makedirs(out_p)
     # output csv file name
-    fname = f"dataset0_03_inference_result.csv"
+    fname = f"dataset0_ten_inference_result.csv"
 
     with open(os.path.join(out_p, fname), 'w') as f:
         res_writer = csv.writer(f, delimiter=',')
@@ -135,7 +135,7 @@ def main():
 
     writeoutput(args, len(predict_images), resultlist, args.output)
 
-    emptyname = f"dataset0_03_inference_empty.csv"
+    emptyname = f"dataset0_ten_inference_empty.csv"
     empty_df = pd.DataFrame(data={"empty_IMG_ID": empty_list})
     empty_df.to_csv(emptyname, index=False)
 

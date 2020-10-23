@@ -16,7 +16,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-c', '--cpu', action='store_true', help='use cpu')
     # dataset
-    parser.add_argument('-l', '--labels', type=str, default='dbfs:/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv', help='path to ground truth labels')
+    parser.add_argument('-l', '--labels', type=str, default='/dbfs/mnt/group03/dataset_0e_merge_drope.csv/part-00000-tid-2991617681581727343-288f20d1-597c-4be2-a8cd-f040575e7279-189207-1-c000.csv', help='path to ground truth labels')
     #parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
     # model
     parser.add_argument('-m', '--model', type=Path, default='/dbfs/mnt/group03/inference_dataset0/model_ten-03-20.87.h5', help='path to a model checkpoint (.h5)')
@@ -70,7 +70,7 @@ def main():
     predict_images = pd.read_csv(args.labels, usecols=["IMG_ID"])
     image_url = pd.read_csv(args.labels, usecols=["s3_http"])
     #predict_images = predict_images.iloc[0:]
-    print(predict_images.iloc[0].values[0])
+    # print(predict_images.iloc[0].values[0])
     # get predictions
 
     gc_dists = {}
@@ -92,10 +92,10 @@ def main():
 
         ge = ge_base
 
-        print('\t--> Using {} network for geolocation'.format(ge.network_dict['scope']))
+        # print('\t--> Using {} network for geolocation'.format(ge.network_dict['scope']))
         ge.calc_output_dict(img_path)
 
-        print('\t### GEOESTIMATION RESULTS ###')
+        # print('\t### GEOESTIMATION RESULTS ###')
         # ======== modify here 10/15 ========
         # ===== len -1 =====
         for p in range(len(ge.network_dict['partitionings'])):
@@ -110,8 +110,8 @@ def main():
                 gc_dists[p_name][fname] = utils.gc_distance(pred_loc, [img_meta['LAT'], img_meta['LON']])
                 dist_str = f' --> GCD to true location: {gc_dists[p_name][fname]:.2f} km'
 
-            print(f"\tPredicted GPS coordinate (lat, lng) for <{p_name}>: ({pred_loc[0]:.2f}, {pred_loc[1]:.2f})" +
-                  dist_str)
+            # print(f"\tPredicted GPS coordinate (lat, lng) for <{p_name}>: ({pred_loc[0]:.2f}, {pred_loc[1]:.2f})" +
+            #       dist_str)
             if p == 3:
                 resultlist.append([predict_images.iloc[j].values[0], format(img_meta['LAT'], '.2f') , format(pred_loc[0],'.2f'), format(img_meta['LON'],'.2f'), format(pred_loc[1],'.2f'), format(gc_dists[p_name][fname],'.2f'), image_url.iloc[j].values[0]])
 

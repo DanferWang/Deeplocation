@@ -52,7 +52,7 @@ $(document).ready(function () {
         var options = {
             draggable: true,
             title:'current location',
-            // icon: userIcon,
+            icon: userIcon,
             rotationAngle: deg,
             zIndexOffset: 1000 // user marker always on top
         };
@@ -60,8 +60,8 @@ $(document).ready(function () {
     }
 
     $('.close').on('click',function() {
-        //$(this).closest('.card').fadeOut();
-        //$('.collapse').toggle();
+        // $(this).closest('.card').fadeOut();
+        // $('.collapse').toggle();
       })
 
     /**
@@ -86,16 +86,16 @@ $(document).ready(function () {
         return marker;
     }
 
-    function containsObject(obj, list) {
-        var i;
-        for (i = 0; i < list.length; i++) {
-            if (list[i] === obj) {
-                return true;
-            }
-        }
+    // function containsObject(obj, list) {
+    //     var i;
+    //     for (i = 0; i < list.length; i++) {
+    //         if (list[i] === obj) {
+    //             return true;
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
 
     // have to set height of the map explicitly due to leaflet
@@ -143,12 +143,12 @@ $(document).ready(function () {
                 }
 
                 for (var i = 0; i < arr.length; i++) {
-                    //if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
-                    //{
+                    // if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
+                    // {
                         var w = arr[i]
                         dataOpen.set(w, list[w]); // fill map
                         addImageToList(IMG_PATH + list[w].url, i); // fill list of images
-                    //}
+                    // }
                 }
 
                 // inital choose a random image
@@ -158,7 +158,6 @@ $(document).ready(function () {
                 $(".btn_show_result").prop("disabled", false);
 
                 updateTabText();
-
                 updateMapSize();
             }
         });
@@ -382,7 +381,7 @@ $(document).ready(function () {
         // show distance results
         // var distance_user = markerReal.getLatLng().distanceTo(markerUser.getLatLng()) / 1000;
         var distance_model = markerReal.getLatLng().distanceTo(markerEstimated.getLatLng()) / 1000;
-        resultUpdate(distance_user, distance_model);
+        resultUpdate(distance_model);
 
         // update lists
         var item = dataOpen.get(selectedKey);
@@ -400,19 +399,19 @@ $(document).ready(function () {
 
         }
 
-        if (distance_user <= distance_model) {
-            $("#list-images-closed").append(
-                "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
-                "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #5cb85c;'>" +
-                "</a>"
-            );
-        } else {
+        // if (distance_user <= distance_model) {
+        //     $("#list-images-closed").append(
+        //         "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
+        //         "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #5cb85c;'>" +
+        //         "</a>"
+        //     );
+        // } else {
             $("#list-images-closed").append(
                 "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
                 "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #d9534f;'>" +
                 "</a>"
             );
-        }
+        // }
 
         dataOpen.delete(selectedKey); // remove item from dataOpen
         $("#" + selectedKey).remove() // remove item from open image list
@@ -420,16 +419,16 @@ $(document).ready(function () {
         updateTabText();
 
         // update stats and view results
-        number_images++;
-        distance_model_sum += distance_model;
-        distance_user_sum += distance_user;
-        if (distance_user < distance_model) {
-            number_user_hit_model++;
-        }
-        $("#annotated_total_text").text("Annotated images: " + number_images)
-        $("#rate_of_sucess_text").text("Rate of sucess: " + number_user_hit_model + " / " + number_images + " (" + (number_user_hit_model / number_images * 100).toFixed(1) + " %)");
-        $("#mean_error_user_text").text("Your mean error: " + (distance_user_sum / number_images).toFixed(1) + " km");
-        $("#mean_error_model_text").text("Model's mean error: " + (distance_model_sum / number_images).toFixed(1) + " km");
+        // number_images++;
+        // distance_model_sum += distance_model;
+        // distance_user_sum += distance_user;
+        // if (distance_user < distance_model) {
+        //     number_user_hit_model++;
+        // }
+        // $("#annotated_total_text").text("Annotated images: " + number_images)
+        // $("#rate_of_sucess_text").text("Rate of sucess: " + number_user_hit_model + " / " + number_images + " (" + (number_user_hit_model / number_images * 100).toFixed(1) + " %)");
+        // $("#mean_error_user_text").text("Your mean error: " + (distance_user_sum / number_images).toFixed(1) + " km");
+        // $("#mean_error_model_text").text("Model's mean error: " + (distance_model_sum / number_images).toFixed(1) + " km");
     });
 
     // update user marker when click on map
@@ -437,8 +436,8 @@ $(document).ready(function () {
 		if (!move) {
 			return;
 		}
-        markerUser.setLatLng(e.latlng);
-        markerUser.bindPopup("<b>Your estimation:</b><br>" + e.latlng.toString());
+        // markerUser.setLatLng(e.latlng);
+        // markerUser.bindPopup("<b>Your estimation:</b><br>" + e.latlng.toString());
     }
 
 

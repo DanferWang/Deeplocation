@@ -91,9 +91,9 @@ def main():
 
         # get meta information if available
         # img_dir
-        img_path = "/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0]
+        img_path = "/dbfs/mnt/group03/test3000/" + predict_images.iloc[j].values[0]
         if os.path.getsize(img_path) > 1000:
-            fname = os.path.basename("/dbfs/mnt/multimedia-commons/data/images/" + predict_images.iloc[j].values[0])
+            fname = os.path.basename("/dbfs/mnt/group03/test3000/" + predict_images.iloc[j].values[0])
             img_meta = meta_info.loc[meta_info['IMG_ID'] == predict_images.iloc[j].values[0]]
             if len(img_meta) > 0:
                 img_meta = img_meta.iloc[0]

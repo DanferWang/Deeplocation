@@ -137,10 +137,8 @@ def main():
 
     writeoutput(args, len(predict_images), resultlist, args.output)
 
-    emptyname = args.empty
     empty_df = pd.DataFrame(data={"empty_IMG_ID": empty_list})
-    emptyout = args.output+emptyname
-    empty_df.to_csv(emptyout, index=False)
+    empty_df.to_csv(os.path.join(args.output, args.empty), index=False)
 
 
 if __name__ == '__main__':

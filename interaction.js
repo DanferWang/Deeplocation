@@ -28,8 +28,8 @@ $(document).ready(function () {
 
     // map marker
     var markerUser = createUserMarker(0);
-    var markerEstimated = createMarker('demo/leaflet/images/custom/marker_machine.svg', -10);
-    var markerReal = createMarker('demo/leaflet/images/custom/marker_GT_world.svg', 10);
+    var markerEstimated = createMarker('demo/leaflet/images/custom/gps_model.svg', -10);
+    var markerReal = createMarker('demo/leaflet/images/custom/gps_gt.svg', 10);
 
     // stats
     var number_images = 0;

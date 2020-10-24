@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('-c', '--cpu', action='store_true', help='use cpu')
     # dataset
     parser.add_argument('-l', '--labels', type=str,
-                        default='/dbfs/mnt/group03/dataset_0_ten.csv',
+                        required=True,
                         help='path to ground truth labels')
     # parser.add_argument('-i', '--inputs', nargs='+', type=str, required=True, help='path to image file(s)')
     # model
@@ -25,7 +25,9 @@ def parse_args():
                         default='/dbfs/mnt/group03/inference_dataset0/model_ten-03-20.87.h5',
                         help='path to a model checkpoint (.h5)')
     # output_dir
-    parser.add_argument('-o', '--output', type=str, default="/dbfs/mnt/group03", help="path to output directory")
+    parser.add_argument('-o', '--output', type=str, default="/dbfs/mnt/group03/inference", help="path to output directory")
+    parser.add_argument('-r', '--result', type=str, required=True)
+    parser.add_argument('-e', '--empty', type=str, required=True)
     args = parser.parse_args()
     return args
 
@@ -34,7 +36,7 @@ def writeoutput(args, num_predict, res_list, out_p):
     if not os.path.exists(out_p):
         os.makedirs(out_p)
     # output csv file name
-    fname = f"dataset0_ten_inference_result.csv"
+    fname = args.result
 
     with open(os.path.join(out_p, fname), 'w') as f:
         res_writer = csv.writer(f, delimiter=',')
@@ -135,9 +137,10 @@ def main():
 
     writeoutput(args, len(predict_images), resultlist, args.output)
 
-    emptyname = f"dataset0_ten_inference_empty.csv"
+    emptyname = args.empty
     empty_df = pd.DataFrame(data={"empty_IMG_ID": empty_list})
-    empty_df.to_csv(emptyname, index=False)
+    emptyout = args.output+emptyname
+    empty_df.to_csv(emptyout, index=False)
 
 
 if __name__ == '__main__':

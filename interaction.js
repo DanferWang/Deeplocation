@@ -145,9 +145,9 @@ $(document).ready(function () {
                 for (var i = 0; i < arr.length; i++) {
                     // if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
                     // {
-                        var w = arr[i]
-                        dataOpen.set(w, list[w]); // fill map
-                        addImageToList(IMG_PATH + list[w].url, i); // fill list of images
+                        // var w = arr[i]
+                        dataOpen.set(i, list[i]); // fill map
+                        addImageToList(IMG_PATH + list[i].url, i); // fill list of images
                     // }
                 }
 
@@ -204,8 +204,8 @@ $(document).ready(function () {
         map.removeLayer(markerEstimated);
 
         map.setView([15.0, 0.0], zoom=2);
-        markerUser.setLatLng([0.0, 0.0]);
-		markerUser.dragging.enable();
+        // markerUser.setLatLng([0.0, 0.0]);
+        // markerUser.dragging.enable();
 		move = true;
 
         // set results to default

@@ -330,10 +330,10 @@ $(document).ready(function () {
 
     });
 
-    function updateTabText() {
-        $("#open_tab_title").html("Open (" + dataOpen.size + "/" + (dataOpen.size + dataClosed.size) + ")");
-        $("#closed_tab_title").html("Annotated (" + dataClosed.size + "/" + (dataOpen.size + dataClosed.size) + ")");
-    }
+    // function updateTabText() {
+    //     $("#open_tab_title").html("Open (" + dataOpen.size + "/" + (dataOpen.size + dataClosed.size) + ")");
+    //     $("#closed_tab_title").html("Annotated (" + dataClosed.size + "/" + (dataOpen.size + dataClosed.size) + ")");
+    // }
 
     /**
      * Event listener for Deep Location button click.
@@ -378,12 +378,12 @@ $(document).ready(function () {
         item.marker_user_lng = markerUser.getLatLng().lng;
 
         dataClosed.set(selectedKey, item);
-        // set preview closed image
-        if (dataClosed.size == 1) {
-            $(".image_full_closed").attr("src", IMG_PATH + item.url);
+        // // set preview closed image
+        // if (dataClosed.size == 1) {
+        //     $(".image_full_closed").attr("src", IMG_PATH + item.url);
             //$(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
 
-        }
+        // }
 
         // if (distance_user <= distance_model) {
         //     $("#list-images-closed").append(
@@ -392,11 +392,11 @@ $(document).ready(function () {
         //         "</a>"
         //     );
         // } else {
-            $("#list-images-closed").append(
-                "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
-                "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #d9534f;'>" +
-                "</a>"
-            );
+            // $("#list-images-closed").append(
+            //     "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
+            //     "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #d9534f;'>" +
+            //     "</a>"
+            // );
         // }
 
         dataOpen.delete(selectedKey); // remove item from dataOpen

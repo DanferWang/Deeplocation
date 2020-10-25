@@ -143,7 +143,7 @@ $(document).ready(function () {
                 init(dataOpen.get(selectedKey));
                 $(".btn_show_result").prop("disabled", false);
 
-                updateTabText();
+                // updateTabText();
                 updateMapSize();
             }
         });

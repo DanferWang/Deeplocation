@@ -10,21 +10,7 @@ $(document).ready(function () {
     var dataClosed = new Map()
     var move = true;
     
-    //upload the image
-    var reader = new FileReader();
-    reader.onload = function (e) {
-    $('#blah').attr('src', e.target.result);
-    }
-   
-   function readURL(input) {
-        if (input.files && input.files[0]) {
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
-    $("#imgInp").change(function(){
-        readURL(this);
-    });
 
     // map marker
     var markerUser = createUserMarker(0);
@@ -209,10 +195,10 @@ $(document).ready(function () {
 		move = true;
 
         // set results to default
-        $("#distance_model").removeClass("alert-danger alert-success").addClass("alert-secondary");
-        $("#distance_user").removeClass("alert-danger alert-success").addClass("alert-secondary");
-        $("#distance_user").text("You: ");
-        $("#distance_model").text("Model: ");
+        // $("#distance_model").removeClass("alert-danger alert-success").addClass("alert-secondary");
+        // $("#distance_user").removeClass("alert-danger alert-success").addClass("alert-secondary");
+        // $("#distance_user").text("You: ");
+        // $("#distance_model").text("Model: ");
     }
 
     /**
@@ -224,7 +210,7 @@ $(document).ready(function () {
     function resultUpdate(distance_model) {
 
         // $("#distance_user").html("<b>You:</b> " + distance_user.toFixed(2) + " km");
-        $("#distance_model").html("<b>Model:</b> " + distance_model.toFixed(2) + " km");
+        $("#distance_model").html("<b>Distance between two markers:</b> " + distance_model.toFixed(2) + " km");
 
         // if (distance_user <= distance_model) {
         //     $("#distance_user").removeClass("alert-secondary alert-success alert-danger").addClass("alert-success");
@@ -251,9 +237,9 @@ $(document).ready(function () {
         // $("#annotated_total_text").text("Annotated images: 0")
         // $("#rate_of_sucess_text").text("Rate of sucess: ---")
         // $("#mean_error_user_text").text("Your mean error: ---");
-        $("#mean_error_model_text").text("Model's mean error: ---");
+        // $("#mean_error_model_text").text("Model's mean error: ---");
 
-        $("#open_tab_title").tab("show");
+        // $("#open_tab_title").tab("show");
 
         initialize_data();
 
@@ -416,7 +402,7 @@ $(document).ready(function () {
         dataOpen.delete(selectedKey); // remove item from dataOpen
         $("#" + selectedKey).remove() // remove item from open image list
 
-        updateTabText();
+        // updateTabText();
 
         // update stats and view results
         // number_images++;
@@ -464,15 +450,27 @@ $(document).ready(function () {
     // markerUser.addTo(map); // add user marker
 
     // default style of the results
-    $("#distance_model").removeClass("alert-danger alert-success").addClass("alert-secondary");
-    $("#distance_user").removeClass("alert-danger alert-success").addClass("alert-secondary");
-    $("#distance_user").text("You: ");
-    $("#distance_model").text("Model: ");
+    // $("#distance_model").removeClass("alert-danger alert-success").addClass("alert-secondary");
+    // $("#distance_user").removeClass("alert-danger alert-success").addClass("alert-secondary");
+    // $("#distance_user").text("You: ");
+    $("#distance_model").text("Distance between two markers: ");
 
 
     initialize_data();
     updateMapSize();
 
+    //image prediction accuracy
+    Papa.parse('demo/data/accuracy.csv', {
+        download: true,
+        complete: function(results) {
+            var data = results.data, html;
+            for(var i = 1, _l = data.length-1; i <= _l; i++) {
+                var item = data[i];
+                html += '<tr><td>'+item[0].substring(0)+'</td><td>'+item[1].substring(0)+'</td><td>'+item[2].substring(0)+'</td><td>'+item[3].substring(0)+'</td><td>'+item[4].substring(0)+'</td></tr>';
+            }
+            $('#table tbody').append(html);
+        }
+    });
 
 
 });

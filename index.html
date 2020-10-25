@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="demo/leaflet/leaflet.css" />
         <script src="demo/leaflet/leaflet.js"></script>
         <script src="demo/leaflet/leaflet.rotatedMarker.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/solid.css" integrity="sha384-VGP9aw4WtGH/uPAOseYxZ+Vz/vaTb1ehm1bwx92Fm8dTrE+3boLfF1SpAtB1z7HW" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/regular.css" integrity="sha384-ZlNfXjxAqKFWCwMwQFGhmMh3i89dWDnaFU2/VZg9CvsMGA7hXHQsPIqS+JIAmgEq" crossorigin="anonymous">
@@ -193,6 +194,8 @@
                 background-color: #aaa;
                 color: #333;
             }
+            table {width: 80%;margin: 20px auto;}
+
         </style>
 
     </head>
@@ -273,7 +276,7 @@
                                     </div>
                                 </div>
 
-                                <div id="closed_tab" class="tab-pane" style="padding: 0px 0px;">
+                                <!-- <div id="closed_tab" class="tab-pane" style="padding: 0px 0px;">
                                     <div class='alert alert-warning' role='alert' style="margin: 20px; padding: 10px;">There are no images annotated.</div>
 
                                     <div class="list-group list-group-horizontal" id="list-images-closed"></div>
@@ -282,13 +285,35 @@
                                         <p style="margin-bottom: 0px;" class="license_text_closed"></p>
                                         <img class="image_full_closed center rounded" src="" alt="" data-toggle="modal" data-target="#previewFullClosed">
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
-                    <br>
-
+                    
                     <div id="image-card" class="card h-100">
+                        <div class="card-header" > 
+                            <a class="h6 card-title">Prediction Accuracy</a>
+                            <table id="table" cellspacing="10" cellpadding="10" style="color:#000">
+
+                                <thead>
+                                    <tr>
+                                        <th>Continent</th>
+                                        <th>Country</th>
+                                        <th>Region</th>
+                                        <th>City</th>
+                                        <th>Street</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody >
+                            </table>
+                            
+                        </div>
+
+                    </div>
+
+
+                    <!-- <div id="image-card" class="card h-100">
                         <div class="card-header">
                             <a class="h6 card-title">Image Uploading</a>
                             <br>
@@ -301,7 +326,7 @@
                                     <img id="blah" src="#" alt="image preview..." width="300"/>
 
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -339,9 +364,9 @@
                         </div>
                         <div class="card-body padding-small">
 
-                            <p>Distance to ground truth location:</p>
+                            <!-- <p>Distance to ground truth location:</p> -->
                             <!-- <div class="alert alert-success" role="alert" id='distance_user'></div> -->
-                            <div class="alert alert-danger" role="alert" id='distance_model'></div>
+                            <div class="alert" role="alert" id='distance_model'></div>
 
                         </div>
 

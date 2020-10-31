@@ -2,8 +2,7 @@ $(document).ready(function () {
 
 
     var IMG_PATH = ""; // when using local stored images
-    //var CSV_PATH = "demo/data/scene_M_p_im2gps.csv";
-    var CSV_PATH = "demo/data/result_325th.csv"
+    var CSV_PATH = "demo/data/result_410th.csv"
 
     var selectedKey = -1; // current selected key
     var dataOpen = new Map();

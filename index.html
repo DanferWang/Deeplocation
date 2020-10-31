@@ -41,20 +41,8 @@
                 width: auto;
             }
 
-            /* .cite {
-                padding: 2px;
-                padding-left: 10px;
-                color: #383d41;
-                background-color: #e2e3e5;
-                border-color: #d6d8db;
-                padding: .5rem 1.0rem;
-                margin-bottom: 1rem;
-                border: 1px solid transparent;
-                border-radius: .25rem;
-            } */
-
             .top_row_buffer {
-                margin-top: 10px;
+                margin-top: 5px;
             }
 
 
@@ -206,6 +194,7 @@
         <nav class="navbar navbar-light bg-white" style="box-shadow: 0px 0px 4px #888;">
             <a href="#" class="navbar-brand mr-0">
                 <h4 class="tib-green-text">Deep Location</h4>
+             
             </a>
 
             <a href="https://event.cwi.nl/lsde/2020/practical2_projects.shtml"><img src="demo/style/images/icon.svg" width="74px" height="50px" class="d-inline-block align-top" alt=""></a>
@@ -214,28 +203,28 @@
 
 
 
-        <div class="container-fluid" style="max-width: 1920px;">
+        <div class="container-fluid" style="max-width: 3000px;">
 
-            <div class="row top_row_buffer align-items-end">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="coll-card card-header collapsed " data-toggle="collapse" href="#collapseExample">
+            <div class="row top_row_buffer align-items:end" >
+                <div class="navbar" >
+                    <!-- <div class="card" >
+                        <div class=" card-header collapsed " data-toggle="collapse" >
                             <a class="h6">Instructions</a>
-                        </div>
+                        </div> -->
 
-                        <div class="card-body collapse show padding-small" id="collapseExample">
-                            <p>Predict the GPS location of an image by our model.
-                            Usage: Step1: Click Choose Random/ Click one Image, Step2: Click Predict Location</p>
-                            <p>Click Reset to get another 100 images randomly from our dataset(more than 325000 images).</p>
+                        <div class="card-body collapse show padding-small" >
+                            <p>Predict the GPS location of an image by our model.</p>
+                            <p>Usage: Step1: Click 'Choose Random' or choose one Image, Step2: Click 'Predict Location'.</p>
+                            <p>Click 'Reset' to get another 100 images randomly from our dataset(more than 325000 images).</p>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
 
             
 
-                <div class="col-md-8" id="guess_location_desktop">
+                <!-- <div    id="guess_location_desktop">
                     <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg' disabled='true'>Predict Location</button>
-                </div>
+                </div> -->
 
             </div>
 
@@ -336,9 +325,13 @@
                         <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg' disabled='true'>Predict Location</button>
                     </div>
                 </div>
+                
 
                 <div class="col-md-8 h-100 top_row_buffer">
                     <div id="map-card" class="card h-100" style="border: none;">
+                        <div    id="guess_location_desktop">
+                            <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg' disabled='true'>Predict Location</button>
+                        </div>
                         <div class="card-body" style="padding: 0px;">
                             <div id="map"></div>
                         </div>

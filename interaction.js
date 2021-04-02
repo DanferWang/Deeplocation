@@ -8,7 +8,7 @@ $(document).ready(function () {
     var dataOpen = new Map();
     var dataClosed = new Map()
     var move = true;
-    
+
 
 
     // map marker
@@ -36,7 +36,7 @@ $(document).ready(function () {
 
         var options = {
             draggable: true,
-            title:'current location',
+            title: 'current location',
             icon: userIcon,
             rotationAngle: deg,
             zIndexOffset: 1000 // user marker always on top
@@ -44,10 +44,10 @@ $(document).ready(function () {
         return L.marker([52.0, 5.0], options);
     }
 
-    $('.close').on('click',function() {
+    $('.close').on('click', function () {
         // $(this).closest('.card').fadeOut();
         // $('.collapse').toggle();
-      })
+    })
 
     /**
      * Creates a custom marker for GT and Machine.
@@ -98,7 +98,7 @@ $(document).ready(function () {
         }
     }
 
-    $(window).on('resize', function(){
+    $(window).on('resize', function () {
         updateMapSize();
     });
 
@@ -122,17 +122,17 @@ $(document).ready(function () {
                 //allowed_licenses = ['CC-BY-NC-SA 2.0', 'CC-BY-NC 2.0', 'CC-BY-NC-ND 2.0', 'CC-BY 2.0', 'CC-BY-SA 2.0', 'CC-BY-ND 2.0', 'CC0']
 
                 var arr = [];
-                while(arr.length < 100){
+                while (arr.length < 100) {
                     var r = Math.floor(Math.random() * 2999);
-                    if(arr.indexOf(r) === -1) arr.push(r);
+                    if (arr.indexOf(r) === -1) arr.push(r);
                 }
 
                 for (var i = 0; i < arr.length; i++) {
                     // if ((list[i].available == "1") && (containsObject(list[i].license_name, allowed_licenses)))
                     // {
-                        // var w = arr[i]
-                        dataOpen.set(i, list[i]); // fill map
-                        addImageToList(IMG_PATH + list[i].url, i); // fill list of images
+                    // var w = arr[i]
+                    dataOpen.set(i, list[i]); // fill map
+                    addImageToList(IMG_PATH + list[i].url, i); // fill list of images
                     // }
                 }
 
@@ -168,11 +168,11 @@ $(document).ready(function () {
     /**
      * Randomly selects a key from current dataOpen
      */
-     function getRandomKey() {
-         keyList = Array.from(dataOpen.keys());
-         var random = Math.floor(Math.random() * keyList.length);
-         return keyList[random];
-     }
+    function getRandomKey() {
+        keyList = Array.from(dataOpen.keys());
+        var random = Math.floor(Math.random() * keyList.length);
+        return keyList[random];
+    }
 
     function init(item) {
 
@@ -188,10 +188,10 @@ $(document).ready(function () {
         map.removeLayer(markerReal);
         map.removeLayer(markerEstimated);
 
-        map.setView([15.0, 0.0], zoom=2);
+        map.setView([15.0, 0.0], zoom = 2);
         // markerUser.setLatLng([0.0, 0.0]);
         // markerUser.dragging.enable();
-		move = true;
+        move = true;
 
         // set results to default
         // $("#distance_model").removeClass("alert-danger alert-success").addClass("alert-secondary");
@@ -248,8 +248,8 @@ $(document).ready(function () {
      * Choose a random image from dataOpen.
      */
     $("#btn_random_image").click(function () {
-		if (dataOpen.size == 0) {
-			return;
+        if (dataOpen.size == 0) {
+            return;
         }
 
         $(".btn_show_result").prop("disabled", false); // activate button
@@ -300,7 +300,7 @@ $(document).ready(function () {
             var corner2 = L.latLng(Math.max(...latitudes), Math.max(...longitudes));
             console.log(corner1);
             console.log(corner2);
-            map.fitBounds(L.latLngBounds(corner1, corner2), {padding: [50, 50]});
+            map.fitBounds(L.latLngBounds(corner1, corner2), { padding: [50, 50] });
 
             // distanceTo() calculates the great circle distance (equal to stored values in csv)
             // var distance_user = markerReal.getLatLng().distanceTo(markerUser.getLatLng()) / 1000;
@@ -343,7 +343,7 @@ $(document).ready(function () {
         $this.prop("disabled", true);
 
         // update markup popups and positions
-        map.setView([15.0, 0.0], zoom=2);
+        map.setView([15.0, 0.0], zoom = 2);
 
         var latitudes = [markerReal.getLatLng().lat, markerEstimated.getLatLng().lat, markerUser.getLatLng().lat];
         var longitudes = [markerReal.getLatLng().lng, markerEstimated.getLatLng().lng, markerUser.getLatLng().lng];
@@ -353,14 +353,14 @@ $(document).ready(function () {
         var corner2 = L.latLng(Math.max(...latitudes), Math.max(...longitudes));
         console.log(corner1);
         console.log(corner2);
-        map.fitBounds(L.latLngBounds(corner1, corner2), {padding: [50, 50]});
+        map.fitBounds(L.latLngBounds(corner1, corner2), { padding: [50, 50] });
 
         markerEstimated.bindPopup("<b>Model:</b><br>" + markerEstimated.getLatLng().toString());
         markerReal.bindPopup("<b>Ground Truth:</b><br>" + markerReal.getLatLng().toString());
         markerEstimated.addTo(map).update();
         markerReal.addTo(map).update();
-		// markerUser.dragging.disable();
-		move = false;
+        // markerUser.dragging.disable();
+        move = false;
 
 
         // show distance results
@@ -380,7 +380,7 @@ $(document).ready(function () {
         // // set preview closed image
         // if (dataClosed.size == 1) {
         //     $(".image_full_closed").attr("src", IMG_PATH + item.url);
-            //$(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
+        //$(".license_text_closed").text("©" + item.author + ' ' + item.license_name)
 
         // }
 
@@ -391,11 +391,11 @@ $(document).ready(function () {
         //         "</a>"
         //     );
         // } else {
-            // $("#list-images-closed").append(
-            //     "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
-            //     "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #d9534f;'>" +
-            //     "</a>"
-            // );
+        // $("#list-images-closed").append(
+        //     "<a class='list-group-item' data-toggle='list' data-alias='" + selectedKey + "' id='" + selectedKey + "'>" +
+        //     "<img src='" + IMG_PATH + dataClosed.get(selectedKey).url + "'  alt='' class='img-fluid round-borders' style='box-shadow: 0 0 20px #d9534f;'>" +
+        //     "</a>"
+        // );
         // }
 
         dataOpen.delete(selectedKey); // remove item from dataOpen
@@ -418,9 +418,9 @@ $(document).ready(function () {
 
     // update user marker when click on map
     function onMapClick(e) {
-		if (!move) {
-			return;
-		}
+        if (!move) {
+            return;
+        }
         // markerUser.setLatLng(e.latlng);
         // markerUser.bindPopup("<b>Your estimation:</b><br>" + e.latlng.toString());
     }
@@ -435,12 +435,13 @@ $(document).ready(function () {
         zoom: 1.5
     });
     var popup = L.popup();
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        id: 'mapbox/light-v9',
         maxZoom: 13,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
             '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
             'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoiZGFuZmVyd2FuZyIsImEiOiJja2xpN2NndWgyYTI1MndzNDV1bjBrY2d2In0.WdslBmCdgObpqBD0e60C3g'
     }).addTo(map);
 
 
@@ -461,11 +462,11 @@ $(document).ready(function () {
     //image prediction accuracy
     Papa.parse('demo/data/accuracy.csv', {
         download: true,
-        complete: function(results) {
+        complete: function (results) {
             var data = results.data, html;
-            for(var i = 1, _l = data.length-1; i <= _l; i++) {
+            for (var i = 1, _l = data.length - 1; i <= _l; i++) {
                 var item = data[i];
-                html += '<tr><td>'+item[0].substring(0)+'</td><td>'+item[1].substring(0)+'</td><td>'+item[2].substring(0)+'</td><td>'+item[3].substring(0)+'</td><td>'+item[4].substring(0)+'</td></tr>';
+                html += '<tr><td>' + item[0].substring(0) + '</td><td>' + item[1].substring(0) + '</td><td>' + item[2].substring(0) + '</td><td>' + item[3].substring(0) + '</td><td>' + item[4].substring(0) + '</td></tr>';
             }
             $('#table tbody').append(html);
         }

@@ -1,272 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <title>Deep Locations</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-        <script src="demo/js/jquery.csv.min.js"></script>
-        <link rel="stylesheet" href="demo/leaflet/leaflet.css" />
-        <script src="demo/leaflet/leaflet.js"></script>
-        <script src="demo/leaflet/leaflet.rotatedMarker.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+<head>
+    <title>Deep Locations</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="demo/js/jquery.csv.min.js"></script>
+    <link rel="stylesheet" href="demo/leaflet/leaflet.css" />
+    <script src="demo/leaflet/leaflet.js"></script>
+    <script src="demo/leaflet/leaflet.rotatedMarker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/solid.css" integrity="sha384-VGP9aw4WtGH/uPAOseYxZ+Vz/vaTb1ehm1bwx92Fm8dTrE+3boLfF1SpAtB1z7HW" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/regular.css" integrity="sha384-ZlNfXjxAqKFWCwMwQFGhmMh3i89dWDnaFU2/VZg9CvsMGA7hXHQsPIqS+JIAmgEq" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css" integrity="sha384-1rquJLNOM3ijoueaaeS5m+McXPJCGdr5HcA03/VHXxcp2kX2sUrQDmFc3jR5i/C7" crossorigin="anonymous">
-        <link rel="shortcut icon" type="image/x-icon" href="demo/style/images/fea.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/solid.css"
+        integrity="sha384-VGP9aw4WtGH/uPAOseYxZ+Vz/vaTb1ehm1bwx92Fm8dTrE+3boLfF1SpAtB1z7HW" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/regular.css"
+        integrity="sha384-ZlNfXjxAqKFWCwMwQFGhmMh3i89dWDnaFU2/VZg9CvsMGA7hXHQsPIqS+JIAmgEq" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css"
+        integrity="sha384-1rquJLNOM3ijoueaaeS5m+McXPJCGdr5HcA03/VHXxcp2kX2sUrQDmFc3jR5i/C7" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="demo/style/images/fea.ico" />
 
-        <style>
-            html,
-            body {
-                height: 100%;
-            }
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
 
-            .tib-green-text {
-                color: #008080;
-            }
+        .tib-green-text {
+            color: #008080;
+        }
 
-            .tib-green-bg {
-                background-color: #008080;
-                color: #eee;
-            }
+        .tib-green-bg {
+            background-color: #008080;
+            color: #eee;
+        }
 
-            .center {
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-                width: auto;
-            }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: auto;
+        }
 
-            .top_row_buffer {
-                margin-top: 5px;
-            }
+        .top_row_buffer {
+            margin-top: 5px;
+        }
 
 
+        #map {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 460px;
+            border-radius: 4px 0px;
+        }
+
+        @media only screen and (max-width: 600px) {
             #map {
                 position: relative;
                 width: 100%;
-                height: 100%;
-                min-height: 460px;
-                border-radius: 4px 0px;
+                height: 200px;
+                min-height: 200px;
+                max-height: 200px;
             }
-
-            @media only screen and (max-width: 600px) {
-                #map {
-                    position: relative;
-                    width: 100%;
-                    height: 200px;
-                    min-height: 200px;
-                    max-height: 200px;
-                }
-            }
+        }
 
 
-            .preview,
-            .preview_closed {
-                width: 100%;
-                max-height: 90vh;
-                object-fit: contain;
-            }
+        .preview,
+        .preview_closed {
+            width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
 
-            .list-group.list-group-horizontal {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                max-height: 100%;
-                height: 90px;
-                overflow-x: scroll;
-            }
+        .list-group.list-group-horizontal {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            max-height: 100%;
+            height: 90px;
+            overflow-x: scroll;
+        }
 
-            .list-group.list-group-horizontal .list-group-item {
-                margin: 0px;
-                height: 100%;
-                min-width: 90px;
-                padding: 0px 2px;
-            }
+        .list-group.list-group-horizontal .list-group-item {
+            margin: 0px;
+            height: 100%;
+            min-width: 90px;
+            padding: 0px 2px;
+        }
 
-            .list-group.list-group-horizontal .list-group-item img {
-                object-fit: contain;
-                height: 100%;
-                min-height: 100%;
-                width: 100%;
-                min-height: 100%;
-            }
+        .list-group.list-group-horizontal .list-group-item img {
+            object-fit: contain;
+            height: 100%;
+            min-height: 100%;
+            width: 100%;
+            min-height: 100%;
+        }
 
-            .list-group.list-group-horizontal .list-group-item:first-child {
-                border-top-right-radius: 0;
-                border-bottom-left-radius: 4px;
-            }
+        .list-group.list-group-horizontal .list-group-item:first-child {
+            border-top-right-radius: 0;
+            border-bottom-left-radius: 4px;
+        }
 
-            .list-group.list-group-horizontal .list-group-item:last-child {
-                border-top-right-radius: 4px;
-                border-bottom-left-radius: 0;
-                border-right-width: 1px;
-            }
+        .list-group.list-group-horizontal .list-group-item:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-left-radius: 0;
+            border-right-width: 1px;
+        }
 
-            .list-group.list-group.list-group-horizontal .list-group-item.active.show {
-                background-color: #008080;
-            }
+        .list-group.list-group.list-group-horizontal .list-group-item.active.show {
+            background-color: #008080;
+        }
 
-            .image_container {
-                position: relative;
-                height: 100%;
-                text-align: center;
-                color: #888;
-            }
+        .image_container {
+            position: relative;
+            height: 100%;
+            text-align: center;
+            color: #888;
+        }
 
-            #image-card-body {
-                padding: 5px 0px 5px 0px;
-            }
+        #image-card-body {
+            padding: 5px 0px 5px 0px;
+        }
 
-            img.image_full {
-                max-width: 100%;
-                object-fit: contain;
-                max-height: 280px;
-            }
+        img.image_full {
+            max-width: 100%;
+            object-fit: contain;
+            max-height: 280px;
+        }
 
-            img.image_full_closed {
-                max-width: 100%;
-                object-fit: contain;
-                max-height: 280px;
-            }
+        img.image_full_closed {
+            max-width: 100%;
+            object-fit: contain;
+            max-height: 280px;
+        }
 
-            .tab-content {
-                padding: 0px 0px;
-                margin: 0px 0px;
-            }
+        .tab-content {
+            padding: 0px 0px;
+            margin: 0px 0px;
+        }
 
-            .alert {
-                padding: 2px 10px;
-            }
+        .alert {
+            padding: 2px 10px;
+        }
 
-            .coll-card.card-header:after {
-                font-family: 'Font Awesome\ 5 Free';
-                content: '\f107';
-                font-weight: 900;
-                float: right;
-            }
+        .coll-card.card-header:after {
+            font-family: 'Font Awesome\ 5 Free';
+            content: '\f107';
+            font-weight: 900;
+            float: right;
+        }
 
-            #image_list_tabs .nav-item .nav-link {
-                color: #008080;
-            }
+        #image_list_tabs .nav-item .nav-link {
+            color: #008080;
+        }
 
-            #image_list_tabs .nav-item .nav-link:hover {
-                color: #008080;
-                background-color: #e3e3e3;
-            }
+        #image_list_tabs .nav-item .nav-link:hover {
+            color: #008080;
+            background-color: #e3e3e3;
+        }
 
-            #image_list_tabs .nav-item .nav-link.active {
-                color: #000;
-            }
+        #image_list_tabs .nav-item .nav-link.active {
+            color: #000;
+        }
 
-            .card-header {
-                background-color: #b9c9c9;
-                color: #008080;
-            }
+        .card-header {
+            background-color: #b9c9c9;
+            color: #008080;
+        }
 
-            .card-footer {
-                background-color: #daf2f2;
-                border: 1px solid #ddd;
-                border-radius: 0px 4px;
-            }
+        .card-footer {
+            background-color: #daf2f2;
+            border: 1px solid #ddd;
+            border-radius: 0px 4px;
+        }
 
-            .padding-small {
-                padding: 5px 20px;
-            }
+        .padding-small {
+            padding: 5px 20px;
+        }
 
-            .btn_show_result:disabled {
-                background-color: #aaa;
-                color: #333;
-            }
-            table {width: 80%;margin: 20px auto;}
+        .btn_show_result:disabled {
+            background-color: #aaa;
+            color: #333;
+        }
 
-        </style>
+        table {
+            width: 80%;
+            margin: 20px auto;
+        }
+    </style>
 
-    </head>
+</head>
 
 
-    <body class="bg-light">
+<body class="bg-light">
 
-        <nav class="navbar navbar-light" style=" background-color: #a2b8b8;">
-            <a href="#" class="navbar-brand mr-0">
-                <h4 class="tib-green-text">Deep Location</h4>
-             
-            </a>
+    <nav class="navbar navbar-light" style=" background-color: #a2b8b8;">
+        <a href="#" class="navbar-brand mr-0">
+            <h4 class="tib-green-text">Deep Location</h4>
 
-            <a href="https://event.cwi.nl/lsde/2020/practical2_projects.shtml"><img src="demo/style/images/icon.svg" width="74px" height="50px" class="d-inline-block align-top" alt=""></a>
-        </nav>
+        </a>
+
+        <a href="https://event.cwi.nl/lsde/2020/practical2_projects.shtml"><img src="demo/style/images/icon.svg"
+                width="74px" height="50px" class="d-inline-block align-top" alt=""></a>
+    </nav>
 
 
 
 
-        <div class="container-fluid" style="max-width: 1920px; background-color: #daf2f2; padding-top: 12px; height: 100%;">
+    <div class="container-fluid" style="max-width: 1920px; background-color: #daf2f2; padding-top: 12px; height: 100%;">
 
-            <div class="row top_row_buffer align-items:end" style = "background-color: #daf2f2">
-                <div class="navbar" >
-                    <!-- <div class="card" >
+        <div class="row top_row_buffer align-items:end" style="background-color: #daf2f2">
+            <div class="navbar">
+                <!-- <div class="card" >
                         <div class=" card-header collapsed " data-toggle="collapse" >
                             <a class="h6">Instructions</a>
                         </div> -->
 
-                        <div class="card-body collapse show padding-small" >
-                            <p>Predict the GPS location of images by our model.</p>
-                            <p>Usage: Step1: Click 'Choose Random' or choose one Image, Step2: Click 'Predict Location'.</p>
-                            <p>Click 'Reset' to get another 100 images randomly from our dataset(more than 410000 images).</p>
-                        </div>
-                    <!-- </div> -->
+                <div class="card-body collapse show padding-small">
+                    <p>Predict the GPS location of images by our model.</p>
+                    <p>Usage: Step1: Click 'Choose Random' or choose one Image, Step2: Click 'Predict Location'.</p>
+                    <p>Click 'Reset' to get another 100 images randomly from our dataset(more than 410000 images).</p>
                 </div>
+                <!-- </div> -->
+            </div>
 
-            
 
-                <!-- <div    id="guess_location_desktop">
+
+            <!-- <div    id="guess_location_desktop">
                     <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg' disabled='true'>Predict Location</button>
                 </div> -->
 
-            </div>
+        </div>
 
-            
 
-            <div class="row">
-                <div class="col-md-4 top_row_buffer h-100">
 
-                    <div id="image-card" class="card h-100">
-                        <div class="card-header">
-                            <a class="card-title">Image Selection</a>
-                                <button id="reset_image_list" type="button" class="btn btn-outline-secondary tib-green-text btn-sm float-right" style="border: 1px solid #008080;">Reset</button>
+        <div class="row">
+            <div class="col-md-4 top_row_buffer h-100">
 
-                                <button id="btn_random_image" class="btn btn-outline-secondary tib-green-text btn-sm float-right" style="border: 1px solid #008080;">Choose Random</button>                                 
+                <div id="image-card" class="card h-100">
+                    <div class="card-header">
+                        <a class="card-title">Image Selection</a>
+                        <button id="reset_image_list" type="button"
+                            class="btn btn-outline-secondary tib-green-text btn-sm float-right"
+                            style="border: 1px solid #008080;">Reset</button>
 
-                            <ul id="image_list_tabs" class="nav nav-tabs card-header-tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="open_tab_title" data-toggle="tab" href="#open_tab">Open</a>
-                                </li>
-                                <!-- <li class="nav-item">
+                        <button id="btn_random_image"
+                            class="btn btn-outline-secondary tib-green-text btn-sm float-right"
+                            style="border: 1px solid #008080;">Choose Random</button>
+
+                        <ul id="image_list_tabs" class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="open_tab_title" data-toggle="tab"
+                                    href="#open_tab">Open</a>
+                            </li>
+                            <!-- <li class="nav-item">
                                     <a class="nav-link" id="closed_tab_title" data-toggle="tab" href="#closed_tab">Annotated</a>
                                 </li> -->
 
-                            </ul>
+                        </ul>
 
-                        </div>
+                    </div>
 
 
 
-                        <div id="image-card-body" class="card-body" style = "background-color: #daf2f2">
-                            <div class="tab-content">
-                                <div id="open_tab" class="tab-pane active bg-white" style="padding: 0px 0px;">
-                                    <div class="list-group list-group-horizontal" id="list-images-open">
-                                    </div> 
-                                    <div class="image_container">
-                                       <!-- <p style="margin-bottom: 0px;" class="license_text">Photo License:</p> -->
-                                        <img class="image_full center rounded" src="" alt="" data-toggle="modal" data-target="#previewFull">
-                                    </div>
+                    <div id="image-card-body" class="card-body" style="background-color: #daf2f2">
+                        <div class="tab-content">
+                            <div id="open_tab" class="tab-pane active bg-white" style="padding: 0px 0px;">
+                                <div class="list-group list-group-horizontal" id="list-images-open">
                                 </div>
+                                <div class="image_container">
+                                    <!-- <p style="margin-bottom: 0px;" class="license_text">Photo License:</p> -->
+                                    <img class="image_full center rounded" src="" alt="" data-toggle="modal"
+                                        data-target="#previewFull">
+                                </div>
+                            </div>
 
-                                <!-- <div id="closed_tab" class="tab-pane" style="padding: 0px 0px;">
+                            <!-- <div id="closed_tab" class="tab-pane" style="padding: 0px 0px;">
                                     <div class='alert alert-warning' role='alert' style="margin: 20px; padding: 10px;">There are no images annotated.</div>
 
                                     <div class="list-group list-group-horizontal" id="list-images-closed"></div>
@@ -276,34 +289,34 @@
                                         <img class="image_full_closed center rounded" src="" alt="" data-toggle="modal" data-target="#previewFullClosed">
                                     </div>
                                 </div> -->
-                            </div>
                         </div>
                     </div>
-                    
-                    <div id="image-card" class="card h-100">
-                        <div class="card-header" > 
-                            <a class="h6 card-title">Prediction Accuracy</a>
-                            <table id="table" cellspacing="10" cellpadding="10" style="color:#000">
+                </div>
 
-                                <thead>
-                                    <tr>
-                                        <th>Continent</th>
-                                        <th>Country</th>
-                                        <th>Region</th>
-                                        <th>City</th>
-                                        <th>Street</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody >
-                            </table>
-                            
-                        </div>
+                <div id="image-card" class="card h-100">
+                    <div class="card-header">
+                        <a class="h6 card-title">Prediction Accuracy</a>
+                        <table id="table" cellspacing="10" cellpadding="10" style="color:#000">
+
+                            <thead>
+                                <tr>
+                                    <th>Continent</th>
+                                    <th>Country</th>
+                                    <th>Region</th>
+                                    <th>City</th>
+                                    <th>Street</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
 
                     </div>
 
+                </div>
 
-                    <!-- <div id="image-card" class="card h-100">
+
+                <!-- <div id="image-card" class="card h-100">
                         <div class="card-header">
                             <a class="h6 card-title">Image Uploading</a>
                             <br>
@@ -317,67 +330,71 @@
 
                         </div>
                     </div> -->
+            </div>
+
+
+
+            <div id="guess_location_mobile" style="width: 100%;">
+                <div class="col w-100 top_row_buffer">
+                    <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg'
+                        disabled='true'>Predict Location</button>
                 </div>
+            </div>
 
 
-
-                <div id="guess_location_mobile" style="width: 100%;">
-                    <div class="col w-100 top_row_buffer">
-                        <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg' disabled='true'>Predict Location</button>
+            <div class="col-md-8 h-100 top_row_buffer">
+                <div id="map-card" class="card h-100" style="border: none;">
+                    <div id="guess_location_desktop">
+                        <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg'
+                            disabled='true'>Predict Location</button>
                     </div>
-                </div>
-                
-
-                <div class="col-md-8 h-100 top_row_buffer">
-                    <div id="map-card" class="card h-100" style="border: none;">
-                        <div    id="guess_location_desktop">
-                            <button type='button' class='btn_show_result btn tib-green-bg btn-block btn-lg' disabled='true'>Predict Location</button>
-                        </div>
-                        <div class="card-body" style="padding: 0px;">
-                            <div id="map"></div>
-                        </div>
-
-
-                        <div class="card-footer" style="padding: 2px 5px;">
-                            <div id="legend" style="text-align: right;">
-                                <img src="demo/leaflet/images/custom/gps_gt.svg" alt="ground truth marker" width="2%" height="2%">
-                                <small>Ground truth marker</small>
-                                <img src="demo/leaflet/images/custom/gps_model.svg" alt="machine's marker" width="2%" height="2%">
-                                <small>Model's marker</small>
-                                <!-- <img src="demo/leaflet/images/custom/marker_user.svg" alt="your marker" width="2%" height="2%"> -->
-                                <!-- <small>Your marker</small> -->
-                            </div>
-                        </div>
-
+                    <div class="card-body" style="padding: 0px;">
+                        <div id="map"></div>
                     </div>
 
 
-                    <div class="card h-100" id="result_card">
-                        <div class="card-header">
-                            <a class="h6">Result</a>
+                    <div class="card-footer" style="padding: 2px 5px;">
+                        <div id="legend" style="text-align: right;">
+                            <img src="demo/leaflet/images/custom/gps_gt.svg" alt="ground truth marker" width="2%"
+                                height="2%">
+                            <small>Ground truth marker</small>
+                            <img src="demo/leaflet/images/custom/gps_model.svg" alt="machine's marker" width="2%"
+                                height="2%">
+                            <small>Model's marker</small>
+                            <!-- <img src="demo/leaflet/images/custom/marker_user.svg" alt="your marker" width="2%" height="2%"> -->
+                            <!-- <small>Your marker</small> -->
                         </div>
-                        <div class="card-body padding-small" style="background-color: #daf2f2;">
+                    </div>
 
-                            <!-- <p>Distance to ground truth location:</p> -->
-                            <!-- <div class="alert alert-success" role="alert" id='distance_user'></div> -->
-                            <div class="alert" role="alert" id='distance_model'></div>
+                </div>
 
-                        </div>
 
-                        <!-- <div class="card-body padding-small" id="mean_error_model_text">
+                <div class="card h-100" id="result_card">
+                    <div class="card-header">
+                        <a class="h6">Result</a>
+                    </div>
+                    <div class="card-body padding-small" style="background-color: #daf2f2;">
+
+                        <!-- <p>Distance to ground truth location:</p> -->
+                        <!-- <div class="alert alert-success" role="alert" id='distance_user'></div> -->
+                        <div class="alert" role="alert" id='distance_model'></div>
+
+                    </div>
+
+                    <!-- <div class="card-body padding-small" id="mean_error_model_text">
 
                             <p>Model's mean error:</p>
 
                         </div> -->
 
-                    </div>
-                
                 </div>
+
             </div>
+        </div>
 
-            
 
-            <!-- <div class="row">
+
+        <!-- <div class="row">
                 <div class="col-md-6 top_row_buffer">
                     <div class="card h-100" id="result_card">
                         <div class="card-header">
@@ -399,26 +416,26 @@
                     </div>
                 </div> -->
 
-                <!-- <div class="col-lg-3 col-md-6 top_row_buffer">
+        <!-- <div class="col-lg-3 col-md-6 top_row_buffer">
                     <div class="card h-100"> -->
-                        <!-- <div class="card-header">
+        <!-- <div class="card-header">
                             <a>Statistics
                                 <button id="reset_image_list" type="button" class="btn btn-link float-right" style="margin: 0px 0px -2px 0px; padding: 0px;">Reset</button>
                             </a>
                         </div> -->
-                        <!-- <div class="card-body padding-small">
+        <!-- <div class="card-body padding-small">
 
                             <ul class="list-unstyled" style="margin-bottom: 0px;"> -->
-                                <!-- <li class="" id="annotated_total_text">Annotated images: 0</li> -->
-                                <!-- <li class="" id="rate_of_sucess_text">Rate of sucess: ---</li> -->
-                                <!-- <li class="" id="mean_error_user_text">Your mean error: ---</li> -->
-                                <!-- <li class="" id="mean_error_model_text">Model's mean error: ---</li>
+        <!-- <li class="" id="annotated_total_text">Annotated images: 0</li> -->
+        <!-- <li class="" id="rate_of_sucess_text">Rate of sucess: ---</li> -->
+        <!-- <li class="" id="mean_error_user_text">Your mean error: ---</li> -->
+        <!-- <li class="" id="mean_error_model_text">Model's mean error: ---</li>
                             </ul>
                         </div>
                     </div>
                 </div> -->
 
-                <!-- <div class="col-lg-6 col-md-12 top_row_buffer order-lg-first">
+        <!-- <div class="col-lg-6 col-md-12 top_row_buffer order-lg-first">
                     <div class="card h-100">
                         <div class="card-header">
                             <a class="h6">Reference</a>
@@ -436,31 +453,33 @@
                         </div>
                     </div>
                 </div> -->
-            <!-- </div> -->
+        <!-- </div> -->
 
 
+    </div>
+
+    </div>
+    </div>
+
+    </div>
+
+    <div id="previewFull" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <img src="" class="preview img-responsive rounded">
         </div>
+    </div>
 
+    <div id="previewFullClosed" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabelClosed"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <img src="" class="preview_closed img-responsive rounded">
         </div>
-        </div>
+    </div>
 
-        </div>
+</body>
 
-        <div id="previewFull" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <img src="" class="preview img-responsive rounded">
-            </div>
-        </div>
-
-        <div id="previewFullClosed" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabelClosed" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <img src="" class="preview_closed img-responsive rounded">
-            </div>
-        </div>
-
-    </body>
-
-    <script src="interaction.js"></script>
+<script src="interaction.js"></script>
 
 
 </html>
